@@ -1,1 +1,3 @@
 # threejs
+
+这是一个学习threeJS的仓库，里面记录了从最简单的html文件中引入threejs到使用vite项目的过程
