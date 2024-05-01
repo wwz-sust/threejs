@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script type="importmap">
+    {
+        "imports": {
+            "three": "./js/three.module.min.js",
+            "three/addons/": "./jsm/"
+        }
+    }
+   
+</script>
+<script type="module">
+    /*
+       "three": "../build/three.module.js"：这行定义了别名 three
+       意味着在import语句中可以通过简单地写 import * as THREE from 'three'; 
+       来加载位于 "../build/three.module.js" 的three.js库。
+       "three/addons/": "./jsm/"
+       这行定义了一个目录别名 three/addons/，指向 "./jsm/" 目录。
+       这意味着可以使用像 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'; 
+       这样的语句来导入位于 ./jsm/controls/OrbitControls.js 的模块。
+       */
+    
+    // 引入three.js主模块
+    import * as THREE from 'three';
+
+    // 引入OrbitControls
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    console.log("THREE.Scene:", THREE.Scene);
+    console.log("OrbitControls:", OrbitControls);
+</script>
+
+</html>
