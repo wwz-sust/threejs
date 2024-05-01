@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script type="importmap">
+{
+    "imports": {
+        "three": "./js/three.module.min.js"
+    }
+}
+</script>
+<script type="module">
+import * as THREE from "three";
+// console.log(THREE.Scene);
+// 创建一个场景
+var scene = new THREE.Scene();
+
+// 创建一个几何体
+var geometry = new THREE.BoxGeometry(100, 100, 100);
+
+// 创建一个材质
+var material = new THREE.MeshBasicMaterial({
+    color: 0xff0000, // 红色材质
+});
+
+// 创建一个网格模型，也就是是创建一个物体，就是将几何体和材质结合起来
+var mesh = new THREE.Mesh(geometry, material);
+
+// 设置物体在场景中的位置
+mesh.position.set(0,0,0); // x y z
+
+// 在场景中添加物体
+scene.add(mesh);
+
+// 声明画布canvas的size
+const width = 800, height = 500;
+
+// 定义一个相机，四个参数：观察的角度（默认50度），比例，近面点，远面点。
+// 这里的比例一般就设置成画布width和height的比值
+var camera = new THREE.PerspectiveCamera(30, width/height, 0.5, 2000);
+
+// 设置相机的位置
+camera.position(200,200,200);
+
+// 相机的视野，观察目标点的坐标，也就是说相机的镜头要看向哪里
+// 相机可以看向一个点或者看向一个物体，比如mesh，
+// 相机的事业设置用lookAt()
+camera.lookAt(mesh); // 让相机看向我们创建的正方体
+camera.lookAt(0,0,0);// 让相机看向原点
+
+</script>
+</html>
