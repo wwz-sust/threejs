@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        *{margin: 0;padding: 0;}
+    </style>
 </head>
 <body>
     
@@ -17,16 +20,19 @@
 </script>
 <script type="module">
 import * as THREE from "three";
-
+// 声明画布canvas的size
+const width = window.innerWidth, height = window.innerHeight;
 // 创建一个场景
 var scene = new THREE.Scene();
 
 // 创建一个几何体
-var geometry = new THREE.BoxGeometry(50, 50, 50);
+var geometry = new THREE.BoxGeometry(150,150,150);
 
 // 创建一个材质
 var material = new THREE.MeshBasicMaterial({
     color: 0x00ffff, // 红色材质
+    transparent: true, // 开启透明
+    opacity: 0.4, // 透明度
 });
 
 // 创建一个网格模型，也就是是创建一个物体，就是将几何体和材质结合起来
@@ -38,8 +44,11 @@ mesh.position.set(0,0,0); // x y z
 // 在场景中添加物体
 scene.add(mesh);
 
-// 声明画布canvas的size
-const width = 800, height = 500;
+// 创建一个坐标轴
+var axesHelper = new THREE.AxesHelper(230);
+
+// 将坐标轴添加到场景中
+scene.add(axesHelper);
 
 // 定义一个相机，四个参数：观察的角度（默认50度），比例，近面点，远面点。
 // 这里的比例一般就设置成画布width和height的比值
