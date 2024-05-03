@@ -28,11 +28,16 @@ var scene = new THREE.Scene();
 // 创建一个几何体
 var geometry = new THREE.BoxGeometry(150,150,150);
 
-// 创建一个材质
-var material = new THREE.MeshBasicMaterial({
-    color: 0x00ffff, // 红色材质
-    transparent: true, // 开启透明
-    opacity: 0.4, // 透明度
+// 创建一个基础材质
+// var material = new THREE.MeshBasicMaterial({
+//     color: 0x00ffff, // 红色材质
+//     transparent: true, // 开启透明
+//     opacity: 0.4, // 透明度
+// });
+
+// 创建一个lambert材质, 想要在灯光下看到物体，需要其他材质，包括Lambert。基础材质是看不到的
+var material = new THREE.MeshLambertMaterial({
+    color: 0x00ffff
 });
 
 // 创建一个网格模型，也就是是创建一个物体，就是将几何体和材质结合起来
@@ -43,6 +48,17 @@ mesh.position.set(0,0,0); // x y z
 
 // 在场景中添加物体
 scene.add(mesh);
+
+// 创建一个光源，光源有很多种，这里创建一个点光源
+// PointLight第一个参数是光源颜色，第二个参数是光源强度
+var pointLight = new THREE.PointLight(0xfffff, 1.0);
+pointLight.decay = 0.0 // 这个是光源衰减程度，默认是2.0，这里设置0.0意思是不衰减
+
+// 将光源提添加到场景中，注意在场景中的位置，这将影响物体的显示效果
+// 只有被光源照射到的物体表面才会显示在canvas中
+// 还要注意光源与物体之间位置关系
+pointLight.position.set(200,500,300);
+scene.add(pointLight);
 
 // 创建一个坐标轴
 var axesHelper = new THREE.AxesHelper(230);
