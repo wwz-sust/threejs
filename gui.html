@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+</body>
+<script type="importmap">
+{
+    "imports": {
+        "three": "./js/three.module.min.js",
+        "controls": "./jsm/controls/OrbitControls.js",
+        "gui": "./jsm/libs/lil-gui.module.min.js"
+    }
+}
+</script>
+<script type="module">
+    import * as THREE from "three";
+    import { OrbitControls } from "controls";
+    import { GUI } from "gui";
+
+    console.log("GUI:", GUI);
+    // 声明画布canvas的size
+    const width = window.innerWidth, height = window.innerHeight;
+    // 创建一个场景
+    var scene = new THREE.Scene();
+
+    // 创建一个几何体
+    var geometry = new THREE.BoxGeometry(150, 150, 150);
+
+    // 创建一个基础材质
+    // var material = new THREE.MeshBasicMaterial({
+    //     color: 0x00ffff, // 红色材质
+    //     transparent: true, // 开启透明
+    //     opacity: 0.4, // 透明度
+    // });
+
+    // 创建一个lambert材质, 想要在灯光下看到物体，需要其他材质，包括Lambert。基础材质是看不到的
+    var material = new THREE.MeshLambertMaterial({
+        color: 0x00ffff
+    });
+
+    // 创建一个网格模型，也就是是创建一个物体，就是将几何体和材质结合起来
+    var mesh = new THREE.Mesh(geometry, material);
+
+    // 设置物体在场景中的位置
+    mesh.position.set(0, 0, 0); // x y z
+
+    // 在场景中添加物体
+    scene.add(mesh);
+
+    // 创建一个光源，光源有很多种，这里创建一个点光源
+    // PointLight第一个参数是光源颜色，第二个参数是光源强度
+    var pointLight = new THREE.PointLight(0xfffff, 1.0);
+    pointLight.decay = 0.0 // 这个是光源衰减程度，默认是2.0，这里设置0.0意思是不衰减
+
+    // 将光源提添加到场景中，注意在场景中的位置，这将影响物体的显示效果
+    // 只有被光源照射到的物体表面才会显示在canvas中
+    // 还要注意光源与物体之间位置关系
+    pointLight.position.set(200, 500, 300);
+    scene.add(pointLight);
+
+    // 添加一个环境光
+    const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambient);
+
+
+    // 创建一个坐标轴
+    var axesHelper = new THREE.AxesHelper(230);
+
+    // 将坐标轴添加到场景中
+    scene.add(axesHelper);
+
+    // 定义一个相机，四个参数：观察的角度（默认50度），比例，近面点，远面点。
+    // 这里的比例一般就设置成画布width和height的比值
+    var camera = new THREE.PerspectiveCamera(70, width / height, 0.5, 2000);
+
+    // 设置相机的位置
+    camera.position.set(300, 300, 300);
+
+    // 相机的视野，观察目标点的坐标，也就是说相机的镜头要看向哪里
+    // 相机可以看向一个点或者看向一个物体，比如mesh，
+    // 相机的事业设置用lookAt()
+    // camera.lookAt(mesh); // 让相机看向我们创建的正方体
+    // camera.lookAt(0,0,0);// 让相机看向原点
+
+    camera.lookAt(new THREE.Vector3(0, 0, 0)); // 调整相机的朝向位置
+
+    // 创建一个渲染器
+    const renderer = new THREE.WebGLRenderer({
+        antialias: true
+    });
+
+    // 设置画布的大小，类似拍照要拍多大的
+    renderer.setSize(width, height);
+
+    // 执行以一个渲染操作，类似相机的拍照的动作，咔
+    renderer.render(scene, camera); // render的参数是场景和相机，相当于拍那个场景和用那个相机进行拍照
+
+    // 拍照完的结果是一个renderer.domElement
+    // 将拍照完的结果放到页面上
+    document.body.appendChild(renderer.domElement);
+
+    /**
+     * 在原生html页面导入OrbitControls时，应该写全路径"controls": "./jsm/controls/OrbitControls.js"
+     * 本课重点是理解，OrbitControls第一个参数是改变相机的位置
+     * 
+    */
+
+    // 创建一个控制器，有两个参数，
+    // 第一个参数是相机camera，本质上control改变的是相机的位置
+    // 第二个参数是要渲染的画布，也就是renderer.domElement
+    var boxControls = new OrbitControls(camera, renderer.domElement);
+
+    boxControls.addEventListener("change", function () {
+        // console.log(camera.position); 这里可以证明改变时，移动了相机的位置
+        renderer.render(scene, camera);
+    })
+
+</script>
+
+</html>
