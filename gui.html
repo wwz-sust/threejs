@@ -123,7 +123,10 @@
 		 */
 		
 		var obj = {
-			x: 10
+			x: 10,
+			color: 0x00ffff,
+			scale: 0,
+			
 		}
 		
 		// onChange事件, 利用这个事件可以同时改变多个属性值得变化
@@ -131,6 +134,21 @@
 			mesh.position.x = val;
 			ambient.intensity = val / 50;
 		});
+		
+		gui.addColor(obj, "color").onChange(function(color){
+			mesh.material.color.set(color);
+		});
+		
+		// add中参数的位数不同就会有不同的组件，如单选框，选择框
+		gui.add(obj, "scale", [-100,0,100])
+		.name("z轴的位置：")
+		.onChange(function(val){
+			mesh.position.z = val;
+		})
+		
+		// gui.add
+		
+		
 	</script>
 
 </html>
