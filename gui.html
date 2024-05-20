@@ -91,12 +91,7 @@
 			renderer.render(scene, camera);
 		})
 		
-		function animate(){
-			requestAnimationFrame(animate);
-			renderer.render(scene, camera);
-		};
 		
-		animate();
 		
 		// 只要创建实例就会在页面添加一个控制条
 		const gui = new GUI();
@@ -124,30 +119,52 @@
 		
 		var obj = {
 			x: 10,
+			y: 0,
 			color: 0x00ffff,
 			scale: 0,
-			
-		}
+			bool: false
+		};
 		
-		// onChange事件, 利用这个事件可以同时改变多个属性值得变化
-		gui.add(obj, "x", 0,100).step(0.2).onChange(function(val){
-			mesh.position.x = val;
-			ambient.intensity = val / 50;
-		});
+		function animate(){
+			if(obj.bool){ // 如果bool为true，则旋转；为false则停止旋转
+				mesh.rotateY(0.01);
+			};
+			requestAnimationFrame(animate);
+			renderer.render(scene, camera);
+		};
+		
+		animate();
+		
+		
 		
 		gui.addColor(obj, "color").onChange(function(color){
 			mesh.material.color.set(color);
 		});
 		
+		
+		
+		gui.add(obj, "bool").name("是否旋转:");
+		
+		// 新建一个子菜单
+		const met = gui.addFolder("坐标");
+		met.close(); // 默认关闭
+		
+		// onChange事件, 利用这个事件可以同时改变多个属性值得变化
+		met.add(obj, "x", 0,100).step(0.2).onChange(function(val){
+			mesh.position.x = val;
+			ambient.intensity = val / 50;
+		});
+		
+		met.add(obj, "y",{top:100, center:0,bottom: -100}).name("在Y轴的位置：").onChange(function(val){
+			mesh.position.y = val;
+		})
+		
 		// add中参数的位数不同就会有不同的组件，如单选框，选择框
-		gui.add(obj, "scale", [-100,0,100])
+		met.add(obj, "scale", [-100,0,100])
 		.name("z轴的位置：")
 		.onChange(function(val){
 			mesh.position.z = val;
 		})
-		
-		// gui.add
-		
 		
 	</script>
 
