@@ -15,13 +15,18 @@
 {
     "imports": {
         "three": "./js/three.module.min.js",
-        "controls": "./jsm/controls/OrbitControls.js"
+        "controls": "./jsm/controls/OrbitControls.js",
+        "stats": "./jsm/libs/stats.module.js"
     }
 }
 </script>
 <script type="module">
 import * as THREE from "three";
 import { OrbitControls } from "controls";
+import Stats from "stats";
+
+const stats = new Stats();
+document.body.appendChild(stats.domElement);
 
 // 声明画布canvas的size
 const width = window.innerWidth, height = window.innerHeight;
@@ -126,6 +131,13 @@ window.onresize = function(){
     camera.updateProjectionMatrix(); // 需要更新的camera的
 }
 
-
+// 循环动画
+function loopAnimate(){
+    mesh.rotateY(0.02);
+    stats.update();
+    renderer.render(scene, camera); 
+    requestAnimationFrame(loopAnimate);
+};
+loopAnimate();
 </script>
 </html>
