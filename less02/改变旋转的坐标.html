@@ -27,7 +27,7 @@
 <script type="module">
     import * as THREE from "three";
     import { OrbitControls } from "controls";
-    import mesh from "./model/model.js";
+    import mesh from "./model/tranlate.js";
 
     const width = window.innerWidth, height = window.innerHeight;
     var scene = new THREE.Scene();
@@ -67,6 +67,12 @@
         renderer.render(scene, camera);
     })
 
+    function animate(){
+        mesh.rotateY(0.01);
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+    }
+    animate()
 </script>
 
 </html>
