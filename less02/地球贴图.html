@@ -36,29 +36,9 @@
 
     scene.add(mesh);
 
-
-    
-
+	// 创建一个底部网格
     const gridHelper = new THREE.GridHelper( 1000,10);
     scene.add( gridHelper );
-    // const texloader = new THREE.TextureLoader();
-    // const texture = texloader.load('/less02/assets/erth.jpg',loadModel);
-
-    // function loadModel(){
-
-    // }
-    // const material = new THREE.MeshLambertMaterial({
-    //         // color: 0xffff00,
-    //         // wireframe: true
-    //         map: texture
-    //     });
-    //     const mesh = new THREE.Mesh(geometry, material);
-
-    //     geometry.translate(200, 0,0)
-
-
-
-
 
     // 创建一个光源，光源有很多种，这里创建一个点光源
     var pointLight = new THREE.PointLight(0xfffff, 1.0);

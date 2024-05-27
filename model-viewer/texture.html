@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>texture</title>
+		<!-- Import the component -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js">
+		</script>
+		<style>
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				padding: 0;
+			}
+
+			model-viewer {
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Use it like any other HTML element -->
+		<model-viewer alt="Neil" id="duck" src="/model-viewer/model/2024052411242183790_scene.glb" ar
+			environment-image="https://modelviewer.dev/shared-assets/environments/moon_1k.hdr"
+			poster="" shadow-intensity="1" camera-controls touch-action="pan-y">
+			<div class="controls">
+				<p>Normals</p>
+				<select id="normals2">
+					<option>None</option>
+					<option
+						value="/model-viewer/model/jpg.jpg">
+						.Jpg</option>
+					<option
+						value="/model-viewer/model/texture.png">
+						.Png</option>
+				</select>
+				<p>Custom texture name</p>
+				<p id="texture-name">None</p>
+				<p>Image name from file name</p>
+				<p id="image-name">None</p>
+			</div>
+		</model-viewer>
+	</body>
+	<script type="module">
+		const modelViewerTexture = document.querySelector("model-viewer#duck");
+		const textureName = document.querySelector('#texture-name');
+		const imageName = document.querySelector('#image-name');
+		
+		// const [material] = modelViewerTexture.model.materials;
+		
+
+		modelViewerTexture.addEventListener("load", () => {
+
+			const material = modelViewerTexture.model.materials[0];
+			
+			material.pbrMetallicRoughness.setBaseColorFactor("#ffffff");
+
+			const createAndApplyTexture = async (channel, event) => {
+				if (event.target.value == "None") {
+					// Clears the texture.
+					material[channel].setTexture(null);
+					// Display the names values
+					textureName.innerText = "None";
+					imageName.innerText = "None";
+				} else if (event.target.value) {
+					// Creates a new texture.
+					const texture = await modelViewerTexture.createTexture(event.target.value);
+					// Set the texture name
+					texture.name = event.target.options[event.target.selectedIndex].text.replace(/ /g, "_")
+						.toLowerCase();
+					// Applies the new texture to the specified channel.
+					material[channel].setTexture(texture);
+					// Display the names values
+					textureName.innerText = texture.name;
+					imageName.innerText = texture.source.name;
+				}
+			}
+
+			document.querySelector('#normals2').addEventListener('input', (event) => {
+				createAndApplyTexture('normalTexture', event);
+			});
+		});
+	</script>
+</html>

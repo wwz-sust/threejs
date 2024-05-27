@@ -12,7 +12,10 @@ const mesh = new THREE.Mesh(geometry, material);
 mesh.material.color.set(0xff00ff)
 
 const mesh2 = mesh.clone();
-mesh2.position.set(200, 100, 0);
+
+// var vector = new THREE.Vector3(200, 100, 0);
+
+mesh2.position.set(100, 100, 0);
 
 // const mesh3 = mesh2.copy(mesh)
 export { mesh, mesh2 };
