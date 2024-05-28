@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // 使用 fetch 获取二进制数据（blob）
+// fetch('https://auto-3d-server.cybever.ai/map/generate/random')
+//     .then(response => {
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//         }
+//         return response.blob();
+//     })
+//     .then(blob => {
+//         // 创建一个对象URL并将其赋值给一个<img>标签的src属性
+//         const url = URL.createObjectURL(blob);
+//         const img = document.createElement('img');
+//         img.src = url;
+//         document.body.appendChild(img);
+        
+//         // 释放对象URL
+//         URL.revokeObjectURL(url);
+//     })
+//     .catch(error => {
+//         console.error('There was a problem with the fetch operation:', error);
+//     });
+
+
+// 使用 fetch 获取二进制数据（arrayBuffer）
+// fetch('https://auto-3d-server.cybever.ai/map/generate/random')
+//     .then(response => {
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//         }
+//         return response.arrayBuffer();
+//     })
+//     .then(arrayBuffer => {
+//         // 处理 arrayBuffer 数据
+//         const bytes = new Uint8Array(arrayBuffer);
+//         console.log(bytes);
+
+//         // 创建一个 Blob 对象并将其赋值给一个对象URL
+//         const blob = new Blob([arrayBuffer]);
+//         const url = URL.createObjectURL(blob);
+
+//         // 例如，将其赋值给一个<img>标签的src属性
+//         const img = document.createElement('img');
+//         img.src = url;
+//         document.body.appendChild(img);
+        
+//         // 释放对象URL
+//         URL.revokeObjectURL(url);
+//     })
+//     .catch(error => {
+//         console.error('There was a problem with the fetch operation:', error);
+//     });
+
+
+
+// 使用 fetch 获取 PNG 图像
+fetch('https://auto-3d-server.cybever.ai/map/generate/random')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.blob(); // 将响应转换为 Blob 对象
+    })
+    .then(blob => {
+        // 创建一个对象URL并将其赋值给一个<img>标签的src属性
+        const url = URL.createObjectURL(blob);
+        const img = document.createElement('img');
+        img.src = url;
+        document.body.appendChild(img);
+        
+        // 释放对象URL（可选）
+        img.onload = () => {
+            URL.revokeObjectURL(url);
+        };
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+    });
+
+</script>
+</html>

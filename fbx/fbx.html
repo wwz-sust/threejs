@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Load FBX Model</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/three@latest/examples/js/loaders/FBXLoader.js"></script> -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../js/three.module.min.js",
+                "controls": "../jsm/controls/OrbitControls.js"
+            }
+        }
+        </script>
+    <script type="module">
+
+        import * as THREE from 'three';
+        import { FBXLoader } from '/jsm/loaders/FBXLoader.js';
+        // import { TextureLoader } from "/jsm/loaders/TextureLoader.js";
+        import { OrbitControls } from "controls";
+        // 初始化场景、相机和渲染器
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 3000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // 添加环境光和方向光
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        ambientLight.position.set()
+        scene.add(ambientLight);
+        scene.background = new THREE.Color("#9aa0a5");
+
+
+        // 创建一个点光源
+        var pointLight = new THREE.PointLight(0xfffff, 1.0);
+        pointLight.decay = 0.0 // 这个是光源衰减程度，默认是2.0，这里设置0.0意思是不衰减
+        pointLight.position.set(200, 200, 500);
+        scene.add(pointLight);
+
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1); // 全强度的白色方向光
+        directionalLight.position.set(500, 200, 200); // 设置方向光的位置
+
+        scene.add(directionalLight);
+
+        const gridHelper = new THREE.GridHelper(2000, 20);
+        gridHelper.position.set(0, 0, 0);
+        scene.add(gridHelper);
+
+
+        const loader = new FBXLoader();
+        loader.load('/fbx/terrain (3).fbx', (model) => {
+            scene.add(model);
+            model.position.set(0, 0, 0); // 可根据需要调整位置
+            directionalLight.target = model; // 指向目标对象（可选）
+
+            // 手动加载材质图片
+            // const texLoader = new THREE.TextureLoader();
+            // // .load()方法加载图像，返回一个纹理对象Texture
+            // const texture = texLoader.load('/fbx/map.png', () => {
+            //     console.log("Texture loaded successfully");
+            // }, undefined, (err) => {
+            //     console.error('An error occurred loading the texture', err);
+            // });
+
+            // 遍历模型中的所有子网格
+            model.traverse(function (child) {
+                if (child.isMesh) {
+                    // 打印原始材质信息
+                    // console.log("Original material:", child.material);
+
+                    // 检查并设置材质
+                    // if (Array.isArray(child.material)) {
+                    //     // 如果材质是数组（多材质）
+                    //     child.material.forEach((mat) => {
+                    //         mat.map = texture;
+                    //         mat.needsUpdate = true; // 确保材质更新
+                    //     });
+                    // } else {
+                    //     // 单一材质
+                    //     child.material.map = texture;
+                    //     child.material.needsUpdate = true; // 确保材质更新
+                    // }
+
+                    // 设置新的材质颜色（可选）
+                    const mcolor = new THREE.Color("#ffffff");
+                    child.material.color = mcolor;
+
+                    // console.log("Updated material:", child.material);
+                }
+            });
+
+        }, (xhr) => {
+            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+        }, (error) => {
+            console.error('An error happened', error);
+        });
+
+
+        // 设置相机位置
+        camera.position.set(650, 700, 0);
+
+
+        // 创建一个坐标轴
+        var axesHelper = new THREE.AxesHelper(630);
+
+        // 将坐标轴添加到场景中
+        scene.add(axesHelper);
+
+
+        // 创建矩形平面几何体
+        var geometry = new THREE.PlaneGeometry(600, 1000); // 5为宽，3为高
+
+        // 创建材质并设置颜色为海洋蓝
+        var material = new THREE.MeshBasicMaterial({ color: "#14a3fb", side: THREE.DoubleSide });
+
+        // 创建网格并应用几何体和材质
+        var plane = new THREE.Mesh(geometry, material);
+
+        // 将矩形平面旋转到XZ平面上
+        plane.rotation.x = -Math.PI / 2; // 旋转90度
+
+        // 将网格添加到场景中
+        scene.add(plane);
+
+
+        // 渲染循环
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        var boxControls = new OrbitControls(camera, renderer.domElement);
+
+        boxControls.addEventListener("change", function () {
+            // console.log(camera.position); 这里可以证明改变时，移动了相机的位置
+            renderer.render(scene, camera);
+        })
+    </script>
+</body>
+
+</html>
