@@ -59,13 +59,14 @@
 
         scene.add(directionalLight);
 
+        // 创建一个底部网格
         const gridHelper = new THREE.GridHelper(2000, 20);
-        gridHelper.position.set(0, 0, 0);
+        gridHelper.position.set(0, -60, 0);
         scene.add(gridHelper);
 
 
         const loader = new FBXLoader();
-        loader.load('/fbx/terrain (3).fbx', (model) => {
+        loader.load('/fbx/terrain.fbx', (model) => {
             scene.add(model);
             model.position.set(0, 0, 0); // 可根据需要调整位置
             directionalLight.target = model; // 指向目标对象（可选）
@@ -125,19 +126,19 @@
 
 
         // 创建矩形平面几何体
-        var geometry = new THREE.PlaneGeometry(600, 1000); // 5为宽，3为高
+        // var geometry = new THREE.PlaneGeometry(600, 1000); // 5为宽，3为高
 
-        // 创建材质并设置颜色为海洋蓝
-        var material = new THREE.MeshBasicMaterial({ color: "#14a3fb", side: THREE.DoubleSide });
+        // // 创建材质并设置颜色为海洋蓝
+        // var material = new THREE.MeshBasicMaterial({ color: "#14a3fb", side: THREE.DoubleSide });
 
-        // 创建网格并应用几何体和材质
-        var plane = new THREE.Mesh(geometry, material);
+        // // 创建网格并应用几何体和材质
+        // var plane = new THREE.Mesh(geometry, material);
 
-        // 将矩形平面旋转到XZ平面上
-        plane.rotation.x = -Math.PI / 2; // 旋转90度
+        // // 将矩形平面旋转到XZ平面上
+        // plane.rotation.x = -Math.PI / 2; // 旋转90度
 
-        // 将网格添加到场景中
-        scene.add(plane);
+        // // 将网格添加到场景中
+        // scene.add(plane);
 
 
         // 渲染循环
